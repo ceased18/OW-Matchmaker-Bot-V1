@@ -15,8 +15,8 @@ game_in_progress = False
 global msg
 global response
 
-vip_list = ["176510548702134273", "176550035994050560", "364167513971621890",
-            "238471482009714688"]
+vip_list = ["176510548702134273", "176095065670811649", "338591837465870336",
+            "452697846345367562", "464328777975988246", "306878726027739137"]
 
 ## Cameron, Michael, Tony, Panda
 
@@ -139,14 +139,32 @@ async def schedule(ctx, time, metric):
 
 
 @client.command()
-async def shock(ctx):
-        ''' Shock
+async def avoid(ctx):
+        ''' Avoids a player from being on your team.
         '''
         # await ctx.message.delete()
-        await ctx.send("Shock did it without sinatraa fuck all " +
-                       "yall that doubted and said super is a " +
-                       "benched player. Thank you for reading my " +
-                       "PSA have a good night see you guys for pugs")
+        await ctx.send("Player has been avoided in queue. " +
+                       "Note that regular matchmaking time may be " +
+                       "extended. Players have a max of 3 avoid " +
+                       "slots, any new avoids will replace the oldest one.")
+
+@client.command()
+async def resetavoid(ctx):
+        ''' Resets your current avoid slots.
+        '''
+        # await ctx.message.delete()
+        await ctx.send("All avoids have been deleted and reset. ") 
+
+@client.command()
+async def highlyavoided(ctx):
+  await ctx.send("<@297127857665343489>,<@230096485289689089>\nWARNING: You have been avoided multiple times by a considerable number of players. " +
+                  "Please speak to an organizer before your next queue " +
+                  "as this may result in longer queue times or the inability to queue at all " +
+                  "while attempting to find a match")
+ 
+
+
+        
 
 
 
@@ -295,7 +313,6 @@ async def mm(ctx):
                 await ctx.send(printTeams(matchList))
                 await client.change_presence(activity=discord.Game(name="a match"))
                 savePlayerData(matchList[0])
-                await ctx.send(randomMap())
                 game_in_progress = True
         else:
                 await ctx.send("Error encountered. Are enough players queued?")

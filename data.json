@@ -199,10 +199,12 @@
         "support": 3438
     },
     "faelysium#0001": {
-        "btag": "faelysium#1278"
+        "btag": "faelysium#1278",
+        "queue": "none"
     },
     "chau#2691": {
-        "btag": "chautime#11763"
+        "btag": "chautime#11763",
+        "queue": "none"
     },
     "NewPlayer.exe#5128": {
         "btag": "\u0194alentine#1728",

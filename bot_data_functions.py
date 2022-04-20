@@ -367,7 +367,7 @@ def getTeam(mmData, teamNum):
                 tanks[player] = mmData[player]["queue"]
             elif mmData[player]["queue"] == "dps":
                 dps[player] = mmData[player]["queue"]
-            else:
+            elif mmData[player]['queue'] == 'support':
                 team[player] = mmData[player]["queue"]
     team.update(dps)
     team.update(tanks)
