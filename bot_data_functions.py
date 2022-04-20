@@ -384,7 +384,7 @@ def printTeams(mmList):
     all_players = (team1|team2)
     lobby_lead_idx = random.randint(0,len(all_players.keys()))
     # Gets random lobby Leader
-    lobby_lead = all_players[all_players.keys()[lobby_lead_idx]]
+    lobby_lead = all_players.keys()[lobby_lead_idx]
     teamA = "Team 1: Avg = " + str(mmList[1]) + "\n"
     teamB = "Team 2: Avg = " + str(mmList[2]) + "\n"
 
