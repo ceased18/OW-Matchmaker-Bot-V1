@@ -9,25 +9,25 @@ class Node():
         self.middle = None
         self.data = data
 
-    def setLeft(left):
+    def setLeft(self,left):
         self.left = left
 
-    def setRight(right):
+    def setRight(self,right):
         self.right = right
 
-    def setMiddle(mid):
+    def setMiddle(self,mid):
         self.middle = mid
 
-    def get():
+    def get(self):
         return self.data
 
-    def getLeft():
+    def getLeft(self):
         return self.left
 
-    def getMiddle():
+    def getMiddle(self):
         return self.middle
 
-    def getRight():
+    def getRight(self):
         return self.right
 
 # playerData[names]["queue"] contains a 3 digit string, 000, 001, 010, 011, 100, 101, and 111
@@ -41,20 +41,23 @@ def matchmake(playerData):
         if roles != "000":
             queued[names] = playerData[names]
     if queued < 12:
+        pass
         #TODO: return error
     if queued > 12:
+        pass
         #TODO: don't worry for now, it's gonna be hard to implement, might be impossible tbh
     
     #TODO: prolly need to store result in var, not sure what result is
     finished = singlerole(queued, 0, 0, 0, {})
 
     if len(finished[1]) == 12:
+        pass
         #put them into teams
 
     #TODO: actual multirole part
     head = Node("")
     keys = finished[0].keys()
-    split(finished[0], keys, head)
+    splitRoles(finished[0], keys, head)
 
     #head now has tree of all possible permutations of player roles
     #now just need to make teams from all paths in the tree
@@ -143,7 +146,7 @@ def singlerole(queued, tank, dps, supp, filled):
 
 #TODO: might need to return head pointer instead of nothing, not sure
 def splitRoles(queued, keys, tree):
-    if len(keys) == 0
+    if len(keys) == 0:
         return
     key = keys[0]
     roles = queued[key]["queue"]

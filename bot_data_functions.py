@@ -375,26 +375,31 @@ def getTeam(mmData, teamNum):
 
 
 def printTeams(mmList):
+    #6D7V8
     ''' Returns a formatted string containing all players for both teams.
     '''
     mmData = mmList[0]
     team1 = getTeam(mmData, 1)
     team2 = getTeam(mmData, 2)
+    all_players = (team1|team2)
+    lobby_lead_idx = random.randint(0,len(all_players.keys()))
+    # Gets random lobby Leader
+    lobby_lead = all_players[all_players.keys()[lobby_lead_idx]]
     teamA = "Team 1: Avg = " + str(mmList[1]) + "\n"
     teamB = "Team 2: Avg = " + str(mmList[2]) + "\n"
-    
-    for player in team1.keys():
-        teamA = teamA + player + \
+
+    for player in team1:
+        teamA = teamA + mmData[player].get("bnet",player) + \
                 (" " * (32-len(player))) + mmData[player]["queue"] + \
                 "\n"
         
-    for player in team2.keys():
-        teamB = teamB + player + \
+    for player in team2:
+        teamB = teamB + mmData[player].get("bnet",player) + \
                 (" " * (32-len(player))) + mmData[player]["queue"] + \
                 "\n"
         
     message = "```\n" + (teamA) + "\n" + (teamB) + "```"
-    return message
+    return f"Lobby Leader:{mmData[lobby_lead].get('bnet',lobby_lead)} Code:6D7V8 \n {message}"
 
 
 def getPlayerTeam(playerID):
