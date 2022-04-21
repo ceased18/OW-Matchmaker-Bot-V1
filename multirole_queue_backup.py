@@ -10,25 +10,25 @@ class Node():
         self.data = data
 
     def setLeft(left):
-        self.left = left
+        "self".left = left
 
     def setRight(right):
-        self.right = right
+        "self".right = right
 
     def setMiddle(mid):
-        self.middle = mid
+        "self".middle = mid
 
     def get():
-        return self.data
+        return "self".data
 
     def getLeft():
-        return self.left
+        return "self".left
 
     def getMiddle():
-        return self.middle
+        return "self".middle
 
     def getRight():
-        return self.right
+        return "self".right
 
 # playerData[names]["queue"] contains a 3 digit string, 000, 001, 010, 011, 100, 101, and 111
 # each respectively hold a role, first being tank, second being dps, third being support
@@ -38,23 +38,23 @@ def matchmake(playerData):
     queued = {}
     for names in playerData.keys():
         roles = playerData[names]["queue"]
-        if roles != "000"
+        if roles != "000":
             queued[names] = playerData[names]
     if queued < 12:
         #TODO: return error
-    if queued > 12:
+        if queued > 12:
         #TODO: don't worry for now, it's gonna be hard to implement, might be impossible tbh
     
     #TODO: prolly need to store result in var, not sure what result is
-    finished = singlerole(queued, 0, 0, 0, {})
+            finished = singlerole(queued, 0, 0, 0, {})
 
     if len(finished[1]) == 12:
         #put them into teams
 
     #TODO: actual multirole part
-    head = Node("")
+        head = Node("")
     keys = finished[0].keys()
-    split(finished[0], keys, head)
+    "split"(finished[0], keys, head)
 
     #head now has tree of all possible permutations of player roles
     #now just need to make teams from all paths in the tree
@@ -142,7 +142,7 @@ def singlerole(queued, tank, dps, supp, filled):
 
 #TODO: might need to return head pointer instead of nothing, not sure
 def splitRoles(queued, keys, tree):
-    if len(keys) == 0
+    if len(keys) == 0:
         return
     key = keys[0]
     roles = queued[key]["queue"]
@@ -182,25 +182,25 @@ def valid_queued_teams(queued):
 
     #count all single queued people
     for role in singled_queued:
-        if role == tank:
+        if role == "tank":
             num_tanks = num_tanks + 1
-        if role == dps:
+        if role == "dps":
             num_dps = num_dps + 1
-        if role == supp:
+        if role == "supp":
             num_supp = num_supp + 1
 
     #count all double queued people
     for role in queued:
-        if role == tank-supp:
+        if role == "tank"-"supp":
             num_tanks = num_tanks + 0.5
             num_supp = num_supp + 0.5
-        if role == tank-dps:
+        if role == "tank"-"dps":
             num_tanks = num_tanks + 0.5
             num_dps = num_dps + 0.5
-        if role == supp-dps:
+        if role == "supp"-"dps":
             num_supp = num_supp + 0.5
             num_dps = num_dps + 0.5
-        if role == fill:
+        if role == "fill":
             num_tanks = num_tanks + 0.34
             num_supp = num_supp + 0.34
             num_dps = num_dps + 0.34

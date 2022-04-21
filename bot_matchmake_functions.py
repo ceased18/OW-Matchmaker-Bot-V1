@@ -198,6 +198,6 @@ def main():
 
     print(matchmake(allPlayerData))
     print()
-    print(adjust(allPlayerData, 1))
+    print("adjust"(allPlayerData, 1))
 
 #main()

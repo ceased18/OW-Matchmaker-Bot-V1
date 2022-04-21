@@ -186,17 +186,17 @@ def valid_queued_players(queued):
 
     #count all single queued people
     for role in singled_queued:
-        if role == tank:
+        if role == "tank":
             num_tanks = num_tanks + 1
-        if role == dps:
+        if role == "dps":
             num_dps = num_dps + 1
-        if role == supp:
+        if role == "supp":
             num_supp = num_supp + 1
 
     for roles in queued:
-        if role == tank-dps or tank-supp or dps-supp:
+        if role == "tank"-"dps" or "tank"-"supp" or "dps"-"supp":
             num_doubles = num_doubles + 1
-        if role == fill:
+        if role == "fill":
             num_fills = num_fills + 1
     
     if num_fills > num_doubles:
@@ -204,16 +204,16 @@ def valid_queued_players(queued):
 
     #count all double queued people
     for role in queued:
-        if role == tank-supp:
+        if role == "tank"-"supp":
             num_tanks = num_tanks + 0.5
             num_supp = num_supp + 0.5
-        if role == tank-dps:
+        if role == "tank"-"dps":
             num_tanks = num_tanks + 0.5
             num_dps = num_dps + 0.5
-        if role == supp-dps:
+        if role == "supp"-"dps":
             num_supp = num_supp + 0.5
             num_dps = num_dps + 0.5
-        if role == fill:
+        if role == "fill":
             num_tanks = num_tanks + 0.34
             num_supp = num_supp + 0.34
             num_dps = num_dps + 0.34

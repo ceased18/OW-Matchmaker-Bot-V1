@@ -193,18 +193,20 @@
     "Ninjajaxx#2991": {
         "btag": "Ninjajaxx#11255",
         "tank": 2833,
-        "queue": "support",
+        "queue": "none",
         "team": -1,
         "id": 366478303219023877,
         "support": 3438
     },
     "faelysium#0001": {
         "btag": "faelysium#1278",
-        "queue": "none"
+        "queue": "none",
+        "team": -1
     },
     "chau#2691": {
         "btag": "chautime#11763",
-        "queue": "none"
+        "queue": "none",
+        "team": -1
     },
     "NewPlayer.exe#5128": {
         "btag": "\u0194alentine#1728",

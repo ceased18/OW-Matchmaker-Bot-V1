@@ -223,13 +223,11 @@ async def move_to_draft(ctx):
 async def captains(ctx):
         ''' Picks two users at random from draft channel.
         '''
-        ## ## MatchMaking Bot Testing channel IDs
-        if ctx.message.guild.id == 651200164169777154:
-                draft_channel = client.get_channel(709248862828888074)
-
-        ## ## We Use this channel IDs
-        if ctx.message.guild.id == 442813167148728330:
-                draft_channel = client.get_channel(652717496045928458)
+        ## ## Private Gauntlet Beta channel IDs
+        if ctx.message.guild.id == 964959897328447559:
+                draft_channel = client.get_channel(964959897794007060)
+                channel1 = client.get_channel(965077932013940786)
+                channel2 = client.get_channel(965077947138576394)
 
         i = random.randint(0, len(draft_channel.members))
         j = random.randint(0, len(draft_channel.members))
@@ -237,7 +235,7 @@ async def captains(ctx):
                 j = random.randint(0, len(draft_channel.members))
         await ctx.send(draft_channel.members[i].mention + " " +
                        draft_channel.members[j].mention +
-                       " are your captains.", delete_after=30)
+                       " are your captains.")
 
 
 @client.command()
@@ -398,15 +396,15 @@ async def queue(ctx, role="none"):
                 they want.
         '''
         if game_in_progress:
-                await ctx.send("Please report a winner before queuing!", delete_after=15)
+                await ctx.send("Please report a winner before queuing!")
         else:
                 if role == "none":
                         await ctx.send(ctx.message.author.mention
                                        + "\n" + printQueue()
-                                       ,delete_after=15)
+                                       )
                 elif role == "clear":
                         clearQueue()
-                        await ctx.send("The queue has been emptied.", delete_after=15)
+                        await ctx.send("The queue has been emptied.")
                 elif role == "fill":
                         roles_needed = []
                         if suppQueued() != 0:
@@ -429,7 +427,7 @@ async def queue(ctx, role="none"):
                         sender = str(ctx.message.author)
                         message = (queueFor(role, sender))
                         await ctx.send(ctx.message.author.mention + ", " +
-                                       message, delete_after=25)
+                                       message)
                         await roles(ctx, 10)
 
 
