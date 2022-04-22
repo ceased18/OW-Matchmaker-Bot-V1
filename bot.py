@@ -48,10 +48,11 @@ async def vip(ctx):
 
 @client.command()
 async def bitches(ctx):
-    member_list = []
-    for member in ctx.guild.members:
-        member_list.append(member.name + '#' + member.discriminator + ", " + str(member.id))
-    await ctx.send('\n'.join(member_list))
+    if str(ctx.message.author.id) in vip_list:
+        member_list = []
+        for member in ctx.guild.members:
+            member_list.append(member.name + '#' + member.discriminator + ", " + str(member.id))
+        await ctx.send('\n'.join(member_list))
 
 
 @client.command(aliases=["btag", "tag", "register"])
