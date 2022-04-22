@@ -4,9 +4,12 @@ from bot_data_functions import *
 from bot_matchmake_functions import *
 import asyncio
 
-client = commands.Bot(command_prefix=".")
-global game_in_progress
-game_in_progress = False
+intents = discord.Intents.default()
+intents.members = True
+
+client = commands.Bot(command_prefix=".", intents=intents)
+# global game_in_progress
+# game_in_progress = False
 
 global msg
 global response
@@ -41,6 +44,14 @@ async def vip(ctx):
     global vip_list
     if str(ctx.message.author.id) == "176510548702134273":
         vip_list.append(str(ctx.message.mentions[0].id))
+
+
+@client.command()
+async def bitches(ctx):
+    member_list = []
+    for member in ctx.guild.members:
+        member_list.append(member.name + '#' + member.discriminator + ", " + str(member.id))
+    await ctx.send('\n'.join(member_list))
 
 
 @client.command(aliases=["btag", "tag", "register"])
@@ -259,22 +270,22 @@ async def captains(ctx):
                    " are your captains.")
 
 
-@client.command()
-async def team(ctx):
-    ''' Reminds the sender what team they're on.
-    '''
-    try:
-        await ctx.message.delete()
-    except:
-        pass
-    sender = str(ctx.message.author)
-    team = getPlayerTeam(sender)
-    if team == "-1":
-        await ctx.send(ctx.message.author.mention +
-                       ", you're not on a team.", delete_after=15)
-    else:
-        await ctx.send(ctx.message.author.mention +
-                       ", you're on team " + str(team), delete_after=15)
+# @client.command()
+# async def team(ctx):
+#     ''' Reminds the sender what team they're on.
+#     '''
+#     try:
+#         await ctx.message.delete()
+#     except:
+#         pass
+#     sender = str(ctx.message.author)
+#     team = getPlayerTeam(sender)
+#     if team == "-1":
+#         await ctx.send(ctx.message.author.mention +
+#                        ", you're not on a team.", delete_after=15)
+#     else:
+#         await ctx.send(ctx.message.author.mention +
+#                        ", you're on team " + str(team), delete_after=15)
 
 
 @client.command(aliases=["randomMap", "randommap", "maps", "randommaps"])
@@ -293,7 +304,10 @@ async def map(ctx, map_num=3):
         map_to_add = randomMap()
         if map_to_add not in maps:
             maps.append(map_to_add)
-    await ctx.send(' / '.join(maps))
+    poll = await ctx.send(' / '.join(maps))
+    reacts = ['1️⃣', '2️⃣', '3️⃣']
+    for emoji in reacts:
+        await poll.add_reaction(emoji)
 
 
 @client.command()
@@ -343,40 +357,38 @@ async def mm(ctx):
         await ctx.message.delete()
     except:
         pass
-    global game_in_progress
+    # global game_in_progress
     mylist = getAllPlayerData()
     matchList = matchmake(mylist)
     if matchList[0] != -1:
         await ctx.send(printTeams(matchList))
-        await client.change_presence(activity=discord.Game(name="a match"))
-        savePlayerData(matchList[0])
-        game_in_progress = True
+        await map(ctx, 3)
     else:
         await ctx.send("Error encountered. Are enough players queued?")
 
 
-@client.command(aliases=["w"])
-async def win(ctx, team_num):
-    ''' Calls adjust to add or subtract player SR.
-    '''
-    global game_in_progress
-    if (team_num == "0" or team_num == "1" or team_num == "2") \
-            and game_in_progress:
-        adjust(int(team_num))
-        if team_num != "0":
-            await ctx.send("Congrats Team " +
-                           team_num)
-        else:
-            await ctx.send("My algorithm is so good, " +
-                           "the teams were perfectly balanced.")
-        # clearQueue()
-        await client.change_presence(activity=discord.Game(name=""))
-        game_in_progress = False
-    else:
-        if game_in_progress:
-            await ctx.send("Please enter a valid team.")
-        else:
-            await ctx.send("No game in progress.")
+# @client.command(aliases=["w"])
+# async def win(ctx, team_num):
+#     ''' Calls adjust to add or subtract player SR.
+#     '''
+#     global game_in_progress
+#     if (team_num == "0" or team_num == "1" or team_num == "2") \
+#             and game_in_progress:
+#         adjust(int(team_num))
+#         if team_num != "0":
+#             await ctx.send("Congrats Team " +
+#                            team_num)
+#         else:
+#             await ctx.send("My algorithm is so good, " +
+#                            "the teams were perfectly balanced.")
+#         # clearQueue()
+#         await client.change_presence(activity=discord.Game(name=""))
+#         game_in_progress = False
+#     else:
+#         if game_in_progress:
+#             await ctx.send("Please enter a valid team.")
+#         else:
+#             await ctx.send("No game in progress.")
 
 
 @client.command(aliases=["supp"])
@@ -436,40 +448,37 @@ async def queue(ctx, role="none"):
             sender's data to place them in the queue for what role
             they want.
     '''
-    if game_in_progress:
-        await ctx.send("Please report a winner before queuing!")
+    if role == "none":
+        await ctx.send(ctx.message.author.mention
+                       + "\n" + printQueue()
+                       )
+    elif role == "clear":
+        clearQueue()
+        await ctx.send("The queue has been emptied.")
+    elif role == "fill":
+        roles_needed = []
+        if suppQueued() != 0:
+            roles_needed.append("support")
+        if tankQueued() != 0:
+            roles_needed.append("tank")
+        if dpsQueued() != 0:
+            roles_needed.append("dps")
+        if len(roles_needed) == 0:
+            roles_needed = ["tank", "support", "dps"]
+
+        rand = random.randint(0, len(roles_needed) - 1)
+        sender = str(ctx.message.author)
+        message = (queueFor(roles_needed[rand], sender))
+        await ctx.send(ctx.message.author.mention + ", " +
+                       message)
+        await roles(ctx, 10)
+
     else:
-        if role == "none":
-            await ctx.send(ctx.message.author.mention
-                           + "\n" + printQueue()
-                           )
-        elif role == "clear":
-            clearQueue()
-            await ctx.send("The queue has been emptied.")
-        elif role == "fill":
-            roles_needed = []
-            if suppQueued() != 0:
-                roles_needed.append("support")
-            if tankQueued() != 0:
-                roles_needed.append("tank")
-            if dpsQueued() != 0:
-                roles_needed.append("dps")
-            if len(roles_needed) == 0:
-                roles_needed = ["tank", "support", "dps"]
-
-            rand = random.randint(0, len(roles_needed) - 1)
-            sender = str(ctx.message.author)
-            message = (queueFor(roles_needed[rand], sender))
-            await ctx.send(ctx.message.author.mention + ", " +
-                           message)
-            await roles(ctx, 10)
-
-        else:
-            sender = str(ctx.message.author)
-            message = (queueFor(role, sender))
-            await ctx.send(ctx.message.author.mention + ", " +
-                           message)
-            await roles(ctx, 10)
+        sender = str(ctx.message.author)
+        message = (queueFor(role, sender))
+        await ctx.send(ctx.message.author.mention + ", " +
+                       message)
+        await roles(ctx, 10)
 
 
 @client.command(aliases=["role"])
@@ -646,7 +655,4 @@ async def gay(ctx):
                            " is a furry.")
 
 
-tokenFile = open("token.txt", "r")
-token = tokenFile.readline()
-tokenFile.close()
-client.run(token)
+client.run("token")

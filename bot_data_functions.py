@@ -41,7 +41,7 @@ def clearQueue():
     return numQueued
 
 
-numQueued = clearQueue()
+# numQueued = clearQueue()
 
 
 def queueFor(role, PlayerID):
@@ -92,25 +92,25 @@ def tankQueued():
         return 0
 
 
-def adjust(winner):
-    ''' Increases the winning team's SR by 100 for the role they queued.
-        Decreases the losing team's SR by 100 for the role they queued.
-    '''
-    global playerData
-    playerData = loadPlayerData()
-    if (winner != 0):
-        for player in playerData:
-            playerData = loadPlayerData()
-            if (playerData[player]["team"] == winner):
-                role = playerData[player]["queue"]
-                playerData[player][role] += 50
-            elif (playerData[player]["team"] != -1):
-                role = playerData[player]["queue"]
-                playerData[player][role] -= 50
-            playerData[player]["team"] = -1
-            playerData[player]["queue"] = "none"
-            savePlayerData(playerData)
-    clearQueue()
+# def adjust(winner):
+#     ''' Increases the winning team's SR by 100 for the role they queued.
+#         Decreases the losing team's SR by 100 for the role they queued.
+#     '''
+#     global playerData
+#     playerData = loadPlayerData()
+#     if (winner != 0):
+#         for player in playerData:
+#             playerData = loadPlayerData()
+#             if (playerData[player]["team"] == winner):
+#                 role = playerData[player]["queue"]
+#                 playerData[player][role] += 50
+#             elif (playerData[player]["team"] != -1):
+#                 role = playerData[player]["queue"]
+#                 playerData[player][role] -= 50
+#             playerData[player]["team"] = -1
+#             playerData[player]["queue"] = "none"
+#             savePlayerData(playerData)
+#     clearQueue()
 
 
 def dpsQueued():
@@ -140,17 +140,19 @@ def deQueue(PlayerID):
         Updates number of players queued for each role.
     '''
     global numQueued
-    role = playerData[PlayerID]["queue"]
+    playerData = loadPlayerData()
+    curr_role = playerData[PlayerID]["queue"]
     playerData[PlayerID]["queue"] = "none"
-    if role == "tank":
-        numQueued["tank"] -= 1
-    elif role == "damage" or role == "dps":
-        numQueued["dps"] -= 1
-    elif role == "support":
-        numQueued["support"] -= 1
-    elif role == "none":
-        return "Not in queue.\n"
+    playerData[PlayerID]["team"] = -1
     savePlayerData(playerData)
+    if curr_role == "tank":
+        numQueued["tank"] -= 1
+    elif curr_role == "damage" or curr_role == "dps":
+        numQueued["dps"] -= 1
+    elif curr_role == "support":
+        numQueued["support"] -= 1
+    elif curr_role == "none":
+        return "Not in queue.\n"
     return "Left the queue.\n"
 
 
@@ -381,12 +383,12 @@ def printTeams(mmList):
     ''' Returns a formatted string containing all players for both teams.
     '''
     mmData = mmList[0]
+    print(mmList)
     team1 = getTeam(mmData, 1)
     team2 = getTeam(mmData, 2)
     all_players = list(team1.keys())
     for key in team2.keys():
         all_players.append(key)
-    print(all_players)
     lobby_lead_idx = random.randint(0, len(all_players))
     # Gets random lobby Leader
     lobby_lead = all_players[lobby_lead_idx]
@@ -399,11 +401,13 @@ def printTeams(mmList):
         teamA = teamA + mmData[player].get("bnet", player) + \
                 (" " * (32 - len(player))) + mmData[player]["queue"] + \
                 "\n"
+        deQueue(player)
 
     for player in team2:
         teamB = teamB + mmData[player].get("bnet", player) + \
                 (" " * (32 - len(player))) + mmData[player]["queue"] + \
                 "\n"
+        deQueue(player)
 
     message = "\n" + teamA + "\n" + teamB + "```"
     return f"```Lobby Leader:\t{mmData[lobby_lead].get('bnet', lobby_lead)} \nCode:\t\t\t6D7V8 \n {message}"
