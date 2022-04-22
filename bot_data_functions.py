@@ -21,12 +21,13 @@ def loadPlayerData():
 
 
 playerData = loadPlayerData()
-numQueued = {"tank":0, "dps":0, "support":0}
+numQueued = {"tank": 0, "dps": 0, "support": 0}
 
 for player in playerData:
     playerData[player]["queue"] = "none"
     playerData[player]["team"] = -1
 savePlayerData(playerData)
+
 
 def clearQueue():
     ''' Clears the number of players queued and empties the queue.
@@ -49,7 +50,7 @@ def queueFor(role, PlayerID):
         Updates number of players queued for each role.
     '''
     if PlayerID not in playerData.keys():
-        return("You don't have any stored data.\n")
+        return ("You don't have any stored data.\n")
     global numQueued
     if role in playerData[PlayerID]:
         deQueue(PlayerID)
@@ -68,7 +69,7 @@ def queueFor(role, PlayerID):
             deQueue(PlayerID)
             return ("Left the queue.\n")
     else:
-        return("Invalid role.\n")
+        return ("Invalid role.\n")
 
 
 def suppQueued():
@@ -97,13 +98,13 @@ def adjust(winner):
     '''
     global playerData
     playerData = loadPlayerData()
-    if(winner != 0):
+    if (winner != 0):
         for player in playerData:
             playerData = loadPlayerData()
-            if(playerData[player]["team"] == winner):
+            if (playerData[player]["team"] == winner):
                 role = playerData[player]["queue"]
                 playerData[player][role] += 50
-            elif(playerData[player]["team"] != -1):
+            elif (playerData[player]["team"] != -1):
                 role = playerData[player]["queue"]
                 playerData[player][role] -= 50
             playerData[player]["team"] = -1
@@ -158,12 +159,12 @@ def webScrape(battletag):
     page = requests.get(link + battletag.replace("#", "-"))
 
     soup = BeautifulSoup(page.text, "html.parser")
-    
+
     ranks = soup.find_all(class_='competitive-rank-role')
     tank = dps = supp = -1
 
     for i in range(len(ranks)):
-        rank_role = ranks[i].find(class_= 'competitive-rank-role-icon')
+        rank_role = ranks[i].find(class_='competitive-rank-role-icon')
         role_sr = ranks[i].find(class_='competitive-rank-level').text
         if "tank" in str(rank_role):
             tank = int(role_sr)
@@ -350,6 +351,7 @@ def getAllPlayerData():
     pData = loadPlayerData()
     return pData
 
+
 key_queue = "queue"
 
 
@@ -375,31 +377,36 @@ def getTeam(mmData, teamNum):
 
 
 def printTeams(mmList):
-    #6D7V8
+    # 6D7V8
     ''' Returns a formatted string containing all players for both teams.
     '''
     mmData = mmList[0]
     team1 = getTeam(mmData, 1)
     team2 = getTeam(mmData, 2)
-    all_players = (team1|team2)
-    lobby_lead_idx = random.randint(0,len(all_players.keys()))
+    all_players = list(team1.keys())
+    for key in team2.keys():
+        all_players.append(key)
+    print(all_players)
+    lobby_lead_idx = random.randint(0, len(all_players))
     # Gets random lobby Leader
-    lobby_lead = all_players.keys()[lobby_lead_idx]
-    teamA = "Team 1: Avg = " + str(mmList[1]) + "\n"
-    teamB = "Team 2: Avg = " + str(mmList[2]) + "\n"
+    lobby_lead = all_players[lobby_lead_idx]
+
+    # to make it print averages, add the commented code back in, replacing the \n
+    teamA = "Team 1: \n"  # Avg = " + str(mmList[1]) + "\n"
+    teamB = "Team 2: \n"  # Avg = " + str(mmList[2]) + "\n"
 
     for player in team1:
-        teamA = teamA + mmData[player].get("bnet",player) + \
-                (" " * (32-len(player))) + mmData[player]["queue"] + \
+        teamA = teamA + mmData[player].get("bnet", player) + \
+                (" " * (32 - len(player))) + mmData[player]["queue"] + \
                 "\n"
-        
+
     for player in team2:
-        teamB = teamB + mmData[player].get("bnet",player) + \
-                (" " * (32-len(player))) + mmData[player]["queue"] + \
+        teamB = teamB + mmData[player].get("bnet", player) + \
+                (" " * (32 - len(player))) + mmData[player]["queue"] + \
                 "\n"
-        
-    message = "```\n" + (teamA) + "\n" + (teamB) + "```"
-    return f"Lobby Leader:{mmData[lobby_lead].get('bnet',lobby_lead)} Code:6D7V8 \n {message}"
+
+    message = "\n" + teamA + "\n" + teamB + "```"
+    return f"```Lobby Leader:\t{mmData[lobby_lead].get('bnet', lobby_lead)} \nCode:\t\t\t6D7V8 \n {message}"
 
 
 def getPlayerTeam(playerID):
