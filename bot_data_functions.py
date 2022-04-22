@@ -410,7 +410,11 @@ def printTeams(mmList):
         deQueue(player)
 
     message = "\n" + teamA + "\n" + teamB + "```"
-    return f"```Lobby Leader:\t{mmData[lobby_lead].get('bnet', lobby_lead)} \nCode:\t\t\t6D7V8 \n {message}"
+    try:
+        return f"```Lobby Leader:\t{mmData[lobby_lead]['btag']} \nCode:\t\t\t6D7V8 \n {message}"
+    except KeyError:
+        return f"```Lobby Leader:\t{mmData[lobby_lead]} (Your battletag is not linked. Please post " \
+               f"it in the chat.)\nCode:\t\t\t6D7V8 \n {message} "
 
 
 def getPlayerTeam(playerID):

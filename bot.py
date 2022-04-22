@@ -289,6 +289,16 @@ async def captains(ctx):
 #                        ", you're on team " + str(team), delete_after=15)
 
 
+async def map_embed(ctx, maplist):
+    embed_msg = discord.Embed(title="Maps",
+                              description="Please vote for your favorite map.", color=0xBE2596)
+    # embed_msg.set_thumbnail(url="https://i.imgur.com/4yg6YMW.jpeg")
+    embed_msg.add_field(name="Map 1", value=maplist[0])
+    embed_msg.add_field(name="Map 2", value=maplist[1])
+    embed_msg.add_field(name="Map 3", value=maplist[2])
+    return embed_msg
+
+
 @client.command(aliases=["randomMap", "randommap", "maps", "randommaps"])
 async def map(ctx, map_num=3):
     ''' Sends a random map.
@@ -305,10 +315,12 @@ async def map(ctx, map_num=3):
         map_to_add = randomMap()
         if map_to_add not in maps:
             maps.append(map_to_add)
-    poll = await ctx.send(' / '.join(maps))
+    poll = await ctx.send(embed=await map_embed(ctx, maps))
     reacts = ['1️⃣', '2️⃣', '3️⃣']
     for emoji in reacts:
         await poll.add_reaction(emoji)
+
+
 
 
 @client.command()
