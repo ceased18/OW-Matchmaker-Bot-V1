@@ -92,6 +92,16 @@ def tankQueued():
         return 0
 
 
+def tankQueued2():
+    ''' Returns the number of tank players needed to fill the queue.
+    '''
+    if numQueued["tank"] < 2:
+        numNeeded = 2 - numQueued["tank"]
+        return str(numNeeded)
+    else:
+        return 0
+
+
 # def adjust(winner):
 #     ''' Increases the winning team's SR by 100 for the role they queued.
 #         Decreases the losing team's SR by 100 for the role they queued.
@@ -383,19 +393,19 @@ def printTeams(mmList):
     ''' Returns a formatted string containing all players for both teams.
     '''
     mmData = mmList[0]
-    print(mmList)
+    # print(mmList)
     team1 = getTeam(mmData, 1)
     team2 = getTeam(mmData, 2)
     all_players = list(team1.keys())
     for key in team2.keys():
         all_players.append(key)
-    lobby_lead_idx = random.randint(0, len(all_players))
+    lobby_lead_idx = random.randint(0, len(all_players)-1)
     # Gets random lobby Leader
     lobby_lead = all_players[lobby_lead_idx]
 
     # to make it print averages, add the commented code back in, replacing the \n
-    teamA = "Team 1: \n"  # Avg = " + str(mmList[1]) + "\n"
-    teamB = "Team 2: \n"  # Avg = " + str(mmList[2]) + "\n"
+    teamA = "Team 1:\tAvg = " + str(mmList[1]) + "\n"
+    teamB = "Team 2:\tAvg = " + str(mmList[2]) + "\n"
 
     for player in team1:
         teamA = teamA + mmData[player].get("bnet", player) + \
