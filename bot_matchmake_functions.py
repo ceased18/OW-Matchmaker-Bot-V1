@@ -285,6 +285,32 @@ def combine2(playerData, tank, dps, supp):
     return [playerData, int(average1 / 3), int(average2 / 3)]
 
 
+def split2(playerData):
+    tank = []
+    dps = []
+    supp = []
+
+    for name in playerData.keys():
+        role = playerData[name]['queue']
+        if role == 'tank':
+            tank.append([name, playerData[name]['tank']])
+        elif role == 'dps':
+            dps.append([name, playerData[name]['dps']])
+        elif role == 'support':
+            supp.append([name, playerData[name]['support']])
+
+    return [select2(tank), select(dps), select(supp)]
+
+
+def select2(role):
+    # print(len(role))
+    selected = []
+    nums = np.random.choice(len(role), 2, replace=False)
+    for i in range(len(nums)):
+        selected.append(role[i])
+    return selected
+
+
 # Selects a random map from the map pool
 def randomMap2():
     i = random.randint(0, 18)
